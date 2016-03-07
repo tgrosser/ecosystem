@@ -1,0 +1,12 @@
+{
+  "Name": "jira",
+  "Version": "6.4.11",
+  "DisplayName": "Jira",
+  "Description": "Atlassian Jira",
+  "Url": "https://www.atlassian.com/software/jira",
+  "Image": "registry.cloudogu.com/official/jira",
+  "HealthCheck": {
+    "Type": "tcp",
+    "Port": 8080
+  }
+}
