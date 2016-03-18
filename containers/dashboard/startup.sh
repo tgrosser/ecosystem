@@ -9,10 +9,12 @@ if [ $? -ne 0 ]; then
     echo "installed git successfull"
   fi
 fi
-
-mkdir /home/dashboard
+#check directory
+if [ ! -d "/home/dashboard" ]; then
+ mkdir /home/dashboard
+fi
 cd /home/dashboard
-#clone repository
+#clone sample repository 
 git clone https://github.com/amirrajan/nodejs-chat.git nodeSample
 if [ $? -eq 0 ]; then
   echo "cloned repository"
@@ -20,7 +22,7 @@ fi
 cd nodeSample
 #check if node is installed correctly
 node --version
-if [ $? -ne 0]; then
+if [ $? -ne 0 ]; then
   echo "bad stuff happend - node is not installed"
   rm -rf nodeSample
   exit
