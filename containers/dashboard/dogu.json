@@ -4,5 +4,14 @@
   "DisplayName": "dashboard",
   "Description": "drive the buisness",
   "Url": "https://github.com/cloudogu",
-  "Image": "registry.cloudogu.com/offical/dashboard"
+  "Image": "registry.cloudogu.com/offical/dashboard",
+  "ExposedPorts": [{
+    "Type": "tcp",
+    "Host": 3000,
+    "Container": 3000
+  }],
+  "HealthCheck": {
+    "Type": "tcp",
+    "Port": 3000
+  }
 }

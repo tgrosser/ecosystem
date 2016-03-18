@@ -10,9 +10,10 @@ RUN apk add --update nodejs
 ADD ./startup.sh /startup.sh
 RUN chmod +x /startup.sh
 
+# tags and ports
 ENV SERVICE_TAGS webapp
+EXPOSE 3000
 
 # science ¯\_(ツ)_/¯
 CMD ["/bin/bash", "/startup.sh"]
 
-EXPOSE 3000
