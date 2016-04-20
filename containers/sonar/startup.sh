@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source /etc/ces/functions.sh
-ADMINGROUP="universalAdmin"
+ADMINGROUP=$(get_config admin_group)
 
 function move_sonar_dir(){
   DIR="$1"
