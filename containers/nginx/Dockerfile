@@ -1,5 +1,5 @@
 # cesi/nginx
-FROM registry.cloudogu.com/official/base:3.3-1
+FROM registry.cloudogu.com/official/base:3.4-1
 MAINTAINER Sebastian Sdorra <sebastian.sdorra@cloudogu.com>
 
 ENV CES_CONFD_VERSION=0.1.4
