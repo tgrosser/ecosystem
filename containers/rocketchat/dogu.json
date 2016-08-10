@@ -1,0 +1,25 @@
+{
+  "Name": "official/rocketchat",
+  "Version": "0.36.0-1",
+  "DisplayName": "Rocket.Chat",
+  "Description": "Have your own Slack like online chat, built with Meteor.",
+  "Category": "Development Apps",
+  "Tags": [
+    "warp", "chat"
+  ],
+  "Url": "https://rocket.chat/",
+  "Image": "registry.cloudogu.com/official/rocketchat",
+  "Dependencies": [
+    "cas", "nginx", "postfix", "mongodb"
+  ],
+  "Volumes": [{
+    "Name": "data",
+    "Path": "/var/lib/rocketchat",
+    "Owner": "1000",
+    "Group": "1000"
+  }],
+  "HealthCheck": {
+    "Type": "tcp",
+    "Port": 3000
+  }
+}
