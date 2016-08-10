@@ -1,0 +1,20 @@
+{
+  "Name": "official/mongodb",
+  "Version": "3.2-1",
+  "DisplayName": "MongoDB",
+  "Description": "MongoDB NoSQL Database.",
+  "Url": "https://www.mongodb.com/",
+  "Category": "Base",
+  "Tags": [
+    "database", "nosql", "mongodb"
+  ],
+  "Image": "registry.cloudogu.com/official/mongodb",
+  "Volumes": [{
+    "Name": "data",
+    "Path": "/data/db"
+  }],
+  "HealthChecks": [{
+	  "Type": "tcp",
+	  "Port": 27017
+	}]
+}
