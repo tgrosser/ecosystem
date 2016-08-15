@@ -40,7 +40,7 @@ RUN npm install -g npm@"$NPM_VERSION"
 RUN mkdir /app \
  && cd /app \
  && addgroup -S -g 1000 rocketchat && adduser -S -h /var/lib/rocketchat -s /bin/false -G rocketchat -u 1000 rocketchat \
- && curl --insecure -fSL "https://rocket.chat/releases/${RC_VERSION}/download" -o rocket.chat.tgz \
+ && curl -Lks "https://rocket.chat/releases/${RC_VERSION}/download" -o rocket.chat.tgz \
  && tar zxf rocket.chat.tgz \
  && rm rocket.chat.tgz \
  && npm cache clear
@@ -51,22 +51,12 @@ COPY resources/npm-shrinkwrap.json /app/bundle/programs/server/npm-shrinkwrap.js
 COPY resources/package.json /app/bundle/programs/server/package.json
 
 RUN cd /app/bundle/programs/server \
+ && npm install -g node-gyp \
  && npm install
-
-# add glibc for various npm errors
-ENV GLIBC_VERSION 2.23-r3
-
-RUN curl --insecure -Lks https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
- && curl --insecure -Lks https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk -o glibc.apk \
- && curl --insecure -Lks https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk -o glibc-bin.apk \
- && apk add glibc.apk glibc-bin.apk
-
-RUN /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib
 
 # recompile bcrypt
 # see http://stackoverflow.com/questions/29340510/bcrypt-is-breaking-my-meteor-application-how-do-i-fix-it/29347616
-RUN npm install -g node-gyp \
- && rm -rf /app/bundle/programs/server/npm/npm-bcrypt/node_modules/bcrypt \
+RUN rm -rf /app/bundle/programs/server/npm/npm-bcrypt/node_modules/bcrypt \
  && cd /app/bundle/programs/server \
  && npm install bcrypt
 
