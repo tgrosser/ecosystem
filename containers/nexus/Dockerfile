@@ -1,16 +1,17 @@
 # registry.cloudogu.com/official/nexus
-FROM registry.cloudogu.com/official/java:8u77-1
+FROM registry.cloudogu.com/official/java:8u102-1
 MAINTAINER Sebastian Sdorra <sebastian.sdorra@cloudogu.com>
 
 # dockerfile based on https://registry.hub.docker.com/u/sonatype/nexus/dockerfile/
 
 # The version of nexus to install
-ENV NEXUS_VERSION 2.11.1-01
+ENV NEXUS_VERSION 3.0.1-01
 ENV CAS_PLUGIN_VERSION 1.2.2-SNAPSHOT
 
 RUN mkdir -p /opt/sonatype/nexus \
   && curl --fail --silent --location --retry 3 \
-    http://download.sonatype.com/nexus/oss/nexus-${NEXUS_VERSION}-bundle.tar.gz \
+    https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz \
+    #http://download.sonatype.com/nexus/oss/nexus-${NEXUS_VERSION}-bundle.tar.gz \
   | gunzip \
   | tar x -C /tmp nexus-${NEXUS_VERSION} \
   && mv /tmp/nexus-${NEXUS_VERSION}/* /opt/sonatype/nexus/ \
