@@ -1,6 +1,6 @@
 {
   "Name": "official/rocketchat",
-  "Version": "0.36.0-1",
+  "Version": "0.42.0-1",
   "DisplayName": "Rocket.Chat",
   "Description": "Have your own Slack like online chat, built with Meteor.",
   "Category": "Development Apps",

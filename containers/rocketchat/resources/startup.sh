@@ -4,7 +4,7 @@ FQDN=$(doguctl config --global fqdn)
 # root url with folder
 # see https://rocket.chat/docs/installation/manual-installation/running-in-a-sub-folder
 # using site url without folder produces invalid mails
-export Site_Url="https://${FQDN}/rocketchat"
+export Site_Url="https://${FQDN}"
 export ROOT_URL="https://${FQDN}/rocketchat"
 
 # ignore cas certificate

@@ -10,11 +10,9 @@ ENV MONGO_URL=mongodb://mongodb:27017/rocketchat \
     PORT=3000 \
     Accounts_AvatarStorePath=/var/lib/rocketchat/uploads
 
-ENV RC_VERSION 0.36.0
-ENV NODE_VERSION 0.10.45
-ENV NPM_VERSION 2.14.1
+ENV RC_VERSION 0.42.0
+ENV NODE_VERSION 4.6.0
 ENV CFLAGS="-D__USE_MISC"
-ENV NPM_VERSION=2
 ENV RM_DIRS=/usr/include
 
 # https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
@@ -36,7 +34,6 @@ RUN tar xfz "node-v${NODE_VERSION}.tar.gz" \
     /usr/share/man /tmp/* /var/cache/apk/* /root/.npm /root/.node-gyp \
     /usr/lib/node_modules/npm/man /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html
 
-RUN npm install -g npm@"$NPM_VERSION"
 RUN mkdir /app \
  && cd /app \
  && addgroup -S -g 1000 rocketchat && adduser -S -h /var/lib/rocketchat -s /bin/false -G rocketchat -u 1000 rocketchat \
@@ -44,11 +41,6 @@ RUN mkdir /app \
  && tar zxf rocket.chat.tgz \
  && rm rocket.chat.tgz \
  && npm cache clear
-
-# use version 1.0.13 of node-fibers instead of 1.0.5
-# see https://github.com/laverdet/node-fibers/issues/285
-COPY resources/npm-shrinkwrap.json /app/bundle/programs/server/npm-shrinkwrap.json
-COPY resources/package.json /app/bundle/programs/server/package.json
 
 RUN cd /app/bundle/programs/server \
  && npm install -g node-gyp \
