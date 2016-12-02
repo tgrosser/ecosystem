@@ -22,7 +22,8 @@ def plugins = [
   'workflow-aggregator',
   'simple-theme-plugin',
   'matrix-auth',
-  'maven'
+  'maven',
+  'ant'
 ];
 
 // add sonar plugin to Jenkins if SonarQube is installed
