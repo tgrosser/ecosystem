@@ -1,5 +1,5 @@
 FROM registry.cloudogu.com/official/base:3.3-1
-MAINTAINER	stephan christann	<stephan.christann@christann.net>
+MAINTAINER	Stephan Christann	<stephan.christann@cloudogu.com>
 
 # INSTALL POSTFIX
 RUN apk add --update postfix openrc \

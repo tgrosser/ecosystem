@@ -9,7 +9,7 @@ ENV SERVICE_TAGS=webapp \
 	TOMCAT_VERSION=8.0.38 \
 	# usermgt version
 	USERMGT_VERSION=1.3.1 \
-	# home directory 
+	# home directory
 	UNIVERSEADM_HOME=/var/lib/usermgt/conf
 
 # create user
@@ -40,11 +40,11 @@ RUN addgroup -S -g 1000 tomcat && adduser -S -h /opt/apache-tomcat -s /bin/bash 
 
 
 # copy setenv.sh
-ADD resources/setenv.sh /opt/apache-tomcat/bin/setenv.sh
+COPY resources/setenv.sh /opt/apache-tomcat/bin/setenv.sh
 # copy resource templates
-ADD resources/conf /resources
+COPY resources/conf /resources
 # copy start script
-ADD startup.sh /startup.sh
+COPY startup.sh /startup.sh
 
 # expose port
 EXPOSE 8080

@@ -19,7 +19,7 @@ RUN apk add --update procps postgresql-client \
     && rm -rf /var/cache/apk/*
 
 # copy templates
-ADD conf/sonar.properties ${SONARQUBE_HOME}/conf/sonar.properties.tpl
+COPY conf/sonar.properties ${SONARQUBE_HOME}/conf/sonar.properties.tpl
 
 # copy sonar-cas plugin (into wrong folder; correct folder would be: /var/lib/sonar/extensions/plugins/)
 # is moved to right folder via startup.sh
@@ -31,7 +31,7 @@ RUN addgroup -S -g 1000 sonar && adduser -S -h "$SONARQUBE_HOME" -s /bin/bash -G
 RUN chown -R sonar:sonar ${SONARQUBE_HOME}
 
 # add startscript
-ADD ./startup.sh /startup.sh
+COPY ./startup.sh /startup.sh
 
 EXPOSE 9000
-CMD /startup.sh
+CMD ["/startup.sh"]

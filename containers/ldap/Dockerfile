@@ -1,6 +1,6 @@
 FROM registry.cloudogu.com/official/base:3.3-3
 
-MAINTAINER stephan christann <stephan.christann@christann.net>
+MAINTAINER Stephan Christann <stephan.christann@cloudogu.com>
 
 # INSTALL SOFTWARE
 RUN apk add --update openldap openldap-clients openldap-back-hdb \

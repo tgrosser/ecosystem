@@ -4,11 +4,12 @@ MAINTAINER Sebastian Sdorra <sebastian.sdorra@cloudogu.com>
 
 
 # scm-server environment
-ENV SCM_VERSION=1.50
-ENV SCM_PKG_URL https://maven.scm-manager.org/nexus/content/repositories/releases/sonia/scm/scm-server/${SCM_VERSION}/scm-server-${SCM_VERSION}-app.tar.gz
-ENV SCM_HOME /var/lib/scm
-ENV SSL_CERT_FILE /opt/scm-server/conf/ca-certificates.crt
-ADD default /etc/default/scm-server
+ENV SCM_VERSION=1.50 \
+    SCM_PKG_URL=https://maven.scm-manager.org/nexus/content/repositories/releases/sonia/scm/scm-server/${SCM_VERSION}/scm-server-${SCM_VERSION}-app.tar.gz \
+    SCM_HOME=/var/lib/scm \
+    SSL_CERT_FILE=/opt/scm-server/conf/ca-certificates.crt
+    
+COPY default /etc/default/scm-server
 
 ## install scm-server
 RUN apk add --update mercurial jq \

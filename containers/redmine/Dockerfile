@@ -39,61 +39,61 @@ RUN apk add --update binutils \
   zlib-dev \
   && rm -rf /tmp/* /var/cache/apk/*
 
-ENV REDMINE_VERSION 3.3.1
-ENV RMCASPLUGINVERSION 1.2.9
-ENV RUBYCASVERSION 2.3.13
-ENV USER redmine
-ENV BASEDIR /usr/share/webapps
-ENV WORKDIR ${BASEDIR}/redmine
+ENV REDMINE_VERSION=3.3.1 \
+    RMCASPLUGINVERSION=1.2.9 \
+    RUBYCASVERSION=2.3.13 \
+    USER=redmine \
+    BASEDIR=/usr/share/webapps \
+    WORKDIR=${BASEDIR}/redmine
 
 # Create redmine user and workdir
-RUN adduser -D ${USER}
-RUN mkdir -p -m 755 ${WORKDIR}
-RUN chown -R ${USER}:${USER} ${BASEDIR}
+RUN adduser -D ${USER} \
+    && mkdir -p -m 755 ${WORKDIR} \
+    && chown -R ${USER}:${USER} ${BASEDIR}
 USER ${USER}
 WORKDIR ${WORKDIR}
 
 # Get Redmine
 RUN curl -L -o ${WORKDIR}.tar.gz http://www.redmine.org/releases/redmine-${REDMINE_VERSION}.tar.gz \
-  && tar -xzf ${WORKDIR}.tar.gz \
-  && mv redmine-${REDMINE_VERSION}/* ${WORKDIR} \
-  && rm -rf redmine-${REDMINE_VERSION} ${WORKDIR}.tar.gz
+    && tar -xzf ${WORKDIR}.tar.gz \
+    && mv redmine-${REDMINE_VERSION}/* ${WORKDIR} \
+    && rm -rf redmine-${REDMINE_VERSION} ${WORKDIR}.tar.gz
 
 USER root
 COPY ./resources/workdir/ ${WORKDIR}/
-RUN gem install activerecord-session_store
-RUN echo 'gem "activerecord-session_store"' >> ${WORKDIR}/Gemfile
-RUN gem install activerecord-deprecated_finders
-RUN echo 'gem "activerecord-deprecated_finders", require: "active_record/deprecated_finders"' >> ${WORKDIR}/Gemfile
-RUN bundle install
-RUN gem install pg -v '0.18.4'
-RUN chown -R ${USER}:${USER} ${BASEDIR}
-RUN mkdir -m 755 /etc/redmine && chown ${USER}:${USER} /etc/redmine
-# Generate secret session token
-RUN rake generate_secret_token --trace -f ${WORKDIR}/Rakefile
+RUN gem install activerecord-session_store \
+    && echo 'gem "activerecord-session_store"' >> ${WORKDIR}/Gemfile \
+    && gem install activerecord-deprecated_finders \
+    && echo 'gem "activerecord-deprecated_finders", require: "active_record/deprecated_finders"' >> ${WORKDIR}/Gemfile \
+    && bundle install \
+    && gem install pg -v '0.18.4' \
+    && chown -R ${USER}:${USER} ${BASEDIR} \
+    && mkdir -m 755 /etc/redmine && chown ${USER}:${USER} /etc/redmine \
+    # Generate secret session token
+    && rake generate_secret_token --trace -f ${WORKDIR}/Rakefile \
 
-# Install (available) rubycas-client version
-RUN git clone https://github.com/cloudogu/rubycas-client.git \
-  && cd rubycas-client \
-  && gem build rubycas-client.gemspec \
-  && gem install rubycas-client-${RUBYCASVERSION}.gem \
-  && rm -rf ../rubycas-client
+    # Install (available) rubycas-client version
+    && git clone https://github.com/cloudogu/rubycas-client.git \
+    && cd rubycas-client \
+    && gem build rubycas-client.gemspec \
+    && gem install rubycas-client-${RUBYCASVERSION}.gem \
+    && rm -rf ../rubycas-client
 
 # Install Redmine CAS plugin
 USER ${USER}
 RUN curl -L -o casplugin${RMCASPLUGINVERSION}.tar.gz https://github.com/cloudogu/redmine_cas/archive/${RMCASPLUGINVERSION}.tar.gz \
   && tar -xzf casplugin${RMCASPLUGINVERSION}.tar.gz \
   && mv redmine_cas-${RMCASPLUGINVERSION} ${WORKDIR}/plugins/redmine_cas \
-  && rm casplugin${RMCASPLUGINVERSION}.tar.gz
+  && rm casplugin${RMCASPLUGINVERSION}.tar.gz \
 
 # Install redmine_activerecord_session_store plugin to make Single Sign-Out work
-RUN curl -L -o redmine_AR_session_store.tar.gz https://github.com/pencil/redmine_activerecord_session_store/archive/v0.0.1.tar.gz \
-  && tar -xzf redmine_AR_session_store.tar.gz \
-  && mv redmine_activerecord_session_store-0.0.1 ${WORKDIR}/plugins/redmine_activerecord_session_store \
-  && rm redmine_AR_session_store.tar.gz
+    && curl -L -o redmine_AR_session_store.tar.gz https://github.com/pencil/redmine_activerecord_session_store/archive/v0.0.1.tar.gz \
+    &&  tar -xzf redmine_AR_session_store.tar.gz \
+    && mv redmine_activerecord_session_store-0.0.1 ${WORKDIR}/plugins/redmine_activerecord_session_store \
+    && rm redmine_AR_session_store.tar.gz \
 
 # redirect production.log to stdout to make it available in hosts /var/log/docker/redmine.log
-RUN ln -s /dev/stdout /usr/share/webapps/redmine/log/production.log
+    && ln -s /dev/stdout /usr/share/webapps/redmine/log/production.log
 
 # startscript
 COPY ./startup.sh /startup.sh

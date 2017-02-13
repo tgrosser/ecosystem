@@ -3,8 +3,8 @@ FROM alpine:3.3
 MAINTAINER Sebastian Sdorra <sebastian.sdorra@cloudogu.com>
 
 # etcd version
-ENV CES_ETCD_VERSION 2.1.3
-ENV DOGUCTL_VERSION 0.1.1
+ENV CES_ETCD_VERSION=2.1.3 \
+    DOGUCTL_VERSION=0.1.1
 
 # install etcd
 RUN apk add --update bash curl openssl wget curl zip unzip ca-certificates jq \
