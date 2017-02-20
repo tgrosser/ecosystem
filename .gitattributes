@@ -1,0 +1,7 @@
+# SET DEFAULT
+* text=auto
+
+# CORRECT EXPLICIT ENDING THAT SHOULD NOT BE CHANGED
+*.sh text eol=lf
+*.bash text eol=lf
+*.conf text eol=lf
