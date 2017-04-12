@@ -2,7 +2,7 @@
 FROM registry.cloudogu.com/official/java:8u121-3
 MAINTAINER Sebastian Sdorra <sebastian.sdorra@cloudogu.com>
 
-ENV SONAR_VERSION 5.6.3
+ENV SONAR_VERSION 5.6.6
 ENV SONARQUBE_HOME /opt/sonar
 
 # mark as webapp for nginx
