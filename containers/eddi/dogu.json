@@ -1,0 +1,20 @@
+{
+  "Name": "official/eddi",
+  "Version": "4.0-1",
+  "DisplayName": "E.D.D.I.",
+  "Description": "Enhanced Dialog Driven Intelligence - Open-Source Chatbot Platform.",
+  "Url": "http://eddi.labs.ai/",
+  "Category": "Development Apps",
+  "Tags": [
+    "chat", "chatbot", "unicorn bob", "bob"
+  ],
+  "Logo": "https://cloudogu.com/images/dogus/eddi.png",
+  "Image": "registry.cloudogu.com/official/eddi",
+  "Dependencies": [
+    "mongodb", "cas", "nginx"
+  ],
+  "ExposedPorts": [{
+    "Type": "tcp",
+    "Host": 7070,
+    "Container": 7070
+  }]}
