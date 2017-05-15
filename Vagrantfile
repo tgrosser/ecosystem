@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "public_network"
 
   # private network configuration
-  # config.vm.network "private_network", ip: "192.168.42.2"
+  # config.vm.network "private_network", type: "dhcp"
 
   # create flag file to set appliance type to vagrant
   config.vm.provision "shell",
@@ -26,6 +26,8 @@ Vagrant.configure(2) do |config|
   config.vm.provider "virtualbox" do |v|
     v.memory = 3072
     # v.cpus = 2
+
+    # v.gui = true;
 
     # enable dns host resolver
     # v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
