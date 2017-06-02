@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Migration - Ecosystem Documentation</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+	
+	<script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Ecosystem Documentation</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            
+<li >
+    <a href="../integration-tests/">Integration-Tests</a>
+</li>
+                            
+<li >
+    <a href="../dogu-creation/">Dogu creation</a>
+</li>
+                            
+<li class="active">
+    <a href="./">Migration</a>
+</li>
+                            
+<li >
+    <a href="../bash-guideline/">Bash Scripting Guideline</a>
+</li>
+                        </ul>
+                    </li>
+                    <li >
+                        <a href="../../about/">About</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="../dogu-creation/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../bash-guideline/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#how-to-migrate-to-cloudogu-ecosystem">How to migrate to Cloudogu Ecosystem</a></li>
+            <li><a href="#jenkins">Jenkins</a></li>
+            <li><a href="#sonarqube">SonarQube</a></li>
+            <li><a href="#sonatype-nexus">Sonatype Nexus</a></li>
+            <li><a href="#scm-manager">SCM Manager</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h2 id="how-to-migrate-to-cloudogu-ecosystem">How to migrate to Cloudogu Ecosystem</h2>
+<h3 id="jenkins">Jenkins</h3>
+<ul>
+<li>Stop jenkins dogu via <code>service ces-jenkins stop</code> and <code>docker stop jenkins</code></li>
+<li>Copy jobs from source Jenkins instance '/job' folder to '/var/lib/ces/jenkins/volumes/data/jobs' and check for right file system permissions</li>
+<li>Install all neccessary plugins to Jenkins</li>
+<li>Start Jenkins via <code>service ces-jenkins start</code></li>
+<li>Don't forget to change documentation/links to your new instance of Jenkins</li>
+</ul>
+<h3 id="sonarqube">SonarQube</h3>
+<ul>
+<li>Stop sonar dogu via <code>service ces-sonar stop</code> and <code>docker stop sonar</code></li>
+<li>Get database name from /var/lib/ces/sonar/volumes/data/conf/sonar.properties (same as sonar.jdbc.username)</li>
+<li>Copy sonar mysql.dump to /var/lib/ces/mysql/volumes/data/</li>
+<li>Switch to Mysql dogu via <code>docker exec -it mysql bash</code></li>
+<li>Execute command: <code>mysql --execute="set global max_allowed_packet=64*1024*1024;"</code></li>
+<li>Drop all tables from database: <code>mysql --execute="DROP DATABASE &lt;database_name&gt;;"</code> and <code>mysql --execute="CREATE DATABASE &lt;database_name&gt;"</code></li>
+<li>Import mysql database dump via <code>mysql &lt;database_name&gt; &lt; /var/lib/mysql/mysql.dump</code></li>
+<li>Remove SonarQube data/es folder: <code>rm -rf /var/lib/ces/sonar/volumes/data/data/es</code></li>
+<li>Add cesAdmin group to mysql database: Execute <code>INSERT INTO &lt;database_name&gt;.groups (name, description) VALUES ('cesAdmin', 'CES-Admin-Group');</code></li>
+<li>Optional: Install required plugins in SonarQube by copying the *.jar files to /var/lib/ces/sonar/volumes/data/extensions/plugins/</li>
+<li>Start SonarQube via <code>service ces-sonar start</code></li>
+</ul>
+<h3 id="sonatype-nexus">Sonatype Nexus</h3>
+<ul>
+<li>Stop Sonatype nexus dogu via <code>service ces-nexus stop</code> and <code>docker stop nexus</code></li>
+<li>Copy the contents of the following folders from your old sonatype_work/nexus directory to the corresponding /var/lib/ces/nexus/volumes/data folders: storage, conf, logs &amp; timeline</li>
+<li>Check for right file system permissions</li>
+<li>Start Sonatype nexus via <code>service ces-nexus start</code></li>
+<li>Update indices</li>
+</ul>
+<h3 id="scm-manager">SCM Manager</h3>
+<ul>
+<li>Stop SCM dogu via <code>service ces-scm stop</code> and <code>docker stop scm</code></li>
+<li>Copy all data from your backup/old SCM folder to /var/lib/ces/scm/volumes/data/</li>
+<li>Start SCM via <code>service ces-scm start</code></li>
+</ul></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

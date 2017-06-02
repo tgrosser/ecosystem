@@ -1,0 +1,199 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Welcome to Ecosystem Documentation\n\n\nDocumentation coming soon...", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#welcome-to-ecosystem-documentation", 
+            "text": "Documentation coming soon...", 
+            "title": "Welcome to Ecosystem Documentation"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/", 
+            "text": "Integration-Tests\n\n\nThis repository consists of integration-tests for the cloudogu ecosystem setup via setup.json. The tests are written in Java inside a Maven Project which uses Selenium and Gauge as plugins for testing using automated browser input.\n\n\nInstallation\n\n\nBefore you can use integration-tests you have to make some presets to your system. These presets consist of maven and gauge as plugins and chromedriver an driver to use selenium with Google Chrome which is the preferred web browser for the integration-tests.   \n\n\nInstall Apache Maven\n\n\nMaven is mandatory because the integration test project is written as an maven project. To install maven on your linux system perform the following steps.\n\n\n\n\nFirst you have to download maven from https://maven.apache.org/download.cgi.\n\n\nEnsure you have java installed and its location set as environment variable.\n\n\nYou either got an \n.zip\n or an \n.gz\n file. The choice is yours. Now extract maven like presented.\n\n\n\n\nunzip apache-maven-3.3.9-bin.zip\n\n\n\n\nor\n\n\ntar xzvf apache-maven-3.3.9-bin.tar.gz\n\n\n\n\n\n\nNow add the \nbin\n directory of the created directory \napache-maven-3.3.9\n to the \nPATH\n environment variable.\n\n\nVerify your version with \nmvn -v\n.\n\n\n\n\nInstalling Gauge\n\n\nThe integration tests are executed via gauge an light-weight cross-platform test automation tool. To run the tests you have to download gauge as described.\n\n\n\n\nDownload Gauge from http://getgauge.io/get-started/.\n\n\nThen execute the following commands:\n\n\n\n\nunzip gauge-$VERSION-$OS.$ARCH.zip\n./install.sh\n\n\n\n\nInstalling chromedriver\n\n\nIt is necessary to have chromedriver installed on your system to run integration tests via Google Chrome. Google Chrome is preferable to Firefox due to connection issues.\n\n\n\n\nAssuming you are running a 64-bit OS, download the latest version of chromedriver and unzip it.\n\n\n\n\nwget -N http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux64.zip -P ~/Downloads\n\n\n\n\nunzip ~/Downloads/chromedriver_linux64.zip -d ~/Downloads\n\n\n\n\n\n\nMake the file you just extracted executable and move it to \n/usr/local/share\n.\n\n\n\n\nchmod +x ~/Download/chromedriver\n\n\n\n\nsudo mv -f ~/Downloads/chromedriver /usr/local/share/chromedriver\n\n\n\n\n\n\nNow create symlinks to chromedriver.\n\n\n\n\nsudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver\n\n\n\n\nsudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver\n\n\n\n\n\n\nNow chromedriver will be found on your system.    \n\n\n\n\nExecuting integration-tests\n\n\nIn the following section setting up variables to start integration-tests will be described. Short examples show how to start Gauge tests using Maven via command line.\n\n\nConfigurate Url\n\n\nIf you are in the \nintegration-tests\n folder, you might configurate the test environment variables using the command line as follows without changing \ngauge_jvm_args\n manually in the file \n./env/default/java.properties\n:\n\n\ngauge_jvm_args= -Deco.system=${url} mvn test\n\n\n\n\ne.g. if the url is \nhttps://192.168.115.136\n\n\ngauge_jvm_args= -Deco.system=https://192.168.115.136 mvn test\n\n\n\n\nThis command will define \n-D\n the system property \neco.system\n which is needed for the test environment and execute \nmvn test\n to start the integration-tests with that property. The specified url should be the same url to open cloudogu in the browser. Once configurated integration tests can be started with \nmvn test\n.\n\n\nStart certain tests using tags\n\n\nWhile \nmvn test\n will start all Gauge specifications defined in the integration-tests, it might be useful only to start certain tests. The scenarios inside the specification files are marked with tags. So if only that scenario should be started you have to enter \nmvn test -Dtags=${tag}\n where \n${tag}\n is predefined in the spec files in the \nspecs\n directory. An command could be \nmvn test -Dtags=jenkins\n to start all Jenkins scenarios. The following values for \n${tag}\n are allowed:\n\n\n\n\n\n\n\n\nTag\n\n\nDefinition\n\n\n\n\n\n\n\n\n\n\njenkins\n\n\nStarts all tests associated with Jenkins\n\n\n\n\n\n\nredmine\n\n\n... with Redmine\n\n\n\n\n\n\nusermgt\n\n\n... with Usermgt\n\n\n\n\n\n\nsonar\n\n\n... Sonar\n\n\n\n\n\n\nnexus\n\n\n... with Nexus\n\n\n\n\n\n\nscm\n\n\n... with SCM\n\n\n\n\n\n\nworkflow\n\n\nStarts all Workflow tests\n\n\n\n\n\n\nrest_api\n\n\nStarts all REST Api tests\n\n\n\n\n\n\nrest_api_token\n\n\nStarts REST Api tests using tokens/keys\n\n\n\n\n\n\nsingle_sign_out\n\n\nStarts all Single Sign Out tests\n\n\n\n\n\n\ngroups\n\n\nStarts tests involving groups\n\n\n\n\n\n\nattributes\n\n\nStarts tests to check user attributes\n\n\n\n\n\n\n\n\nBesides using only one tag it is possible to use a set of tags, assumed the certain set is defined. To use multiple tags use \nmvn test -Dtags=\"${tag0},${tag1}\"\n. For example: The command \nmvn test -Dtags=\"jenkins, workflow\"\n will test the workflow of Jenkins. Allowed tag combinations are presented in the table:\n\n\n\n\n\n\n\n\nTags\n\n\njenkins\n\n\nredmine\n\n\nusermgt\n\n\nsonar\n\n\nnexus\n\n\nscm\n\n\n\n\n\n\n\n\n\n\nworkflow\n\n\nyes\n\n\nyes\n\n\nyes\n\n\nyes\n\n\nyes\n\n\nyes\n\n\n\n\n\n\nrest_api\n\n\nyes\n\n\nyes\n\n\nyes\n\n\nyes\n\n\nyes\n\n\nyes\n\n\n\n\n\n\nrest_api_token\n\n\nyes\n\n\nyes\n\n\nno\n\n\nyes\n\n\nyes\n\n\nno\n\n\n\n\n\n\nsingle_sign_out\n\n\nyes\n\n\nyes\n\n\nyes\n\n\nyes\n\n\nyes\n\n\nyes\n\n\n\n\n\n\ngroups\n\n\nyes\n\n\nyes\n\n\nno\n\n\nyes\n\n\nyes\n\n\nyes\n\n\n\n\n\n\nattributes\n\n\nyes\n\n\nyes\n\n\nno\n\n\nyes\n\n\nno\n\n\nyes\n\n\n\n\n\n\n\n\nSpecifications\n\n\nMaven uses Gauge as an plugin which is executed in the test scope. Gauge consists of files with spec extension so called Specifications. If you run \nmvn test\n in integration-tests all files inside the \nspecs/\n directory with spec extension will be executed. Specifications consist of scenarios, which again consist of a set of procedural Steps. E.g. all combined tests for Jenkins are combined in one spec file which are all tagged with \njenkins\n, single tests inside the file are scenarios. Go on \nGauge web site\n for more informations about the gauge syntax.\n\n\nIn some tests we have the following step syntax:\n\n\n* Jenkins-Login \nadmin\n with password \nadminpw\n with admin rights\n\n\n\n\nSuch a step has to be implemented by a method using the \n@Step\n annotation. E.g. in Java is would look like this:\n\n\n@Step(\nJenkins-Login \nuser\n with password \npassword\n with admin rights\n)\npublic void loginWithAdminRights(String user, String password){\n  // some code using \nuser\n and \npassword\n to log in\n}\n\n\n\n\nThe two arguments \"admin\" and \"adminpw\" defined inside a step in the spec-file are injected to the method \npublic void loginWithAdminRights(String user, String password)\n as user and password. Changing the arguments of the step inside the quotation marks will also change the two Strings \nuser\n and \npassword\n inside the implementing method.", 
+            "title": "Integration-Tests"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/#integration-tests", 
+            "text": "This repository consists of integration-tests for the cloudogu ecosystem setup via setup.json. The tests are written in Java inside a Maven Project which uses Selenium and Gauge as plugins for testing using automated browser input.", 
+            "title": "Integration-Tests"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/#installation", 
+            "text": "Before you can use integration-tests you have to make some presets to your system. These presets consist of maven and gauge as plugins and chromedriver an driver to use selenium with Google Chrome which is the preferred web browser for the integration-tests.", 
+            "title": "Installation"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/#install-apache-maven", 
+            "text": "Maven is mandatory because the integration test project is written as an maven project. To install maven on your linux system perform the following steps.   First you have to download maven from https://maven.apache.org/download.cgi.  Ensure you have java installed and its location set as environment variable.  You either got an  .zip  or an  .gz  file. The choice is yours. Now extract maven like presented.   unzip apache-maven-3.3.9-bin.zip  or  tar xzvf apache-maven-3.3.9-bin.tar.gz   Now add the  bin  directory of the created directory  apache-maven-3.3.9  to the  PATH  environment variable.  Verify your version with  mvn -v .", 
+            "title": "Install Apache Maven"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/#installing-gauge", 
+            "text": "The integration tests are executed via gauge an light-weight cross-platform test automation tool. To run the tests you have to download gauge as described.   Download Gauge from http://getgauge.io/get-started/.  Then execute the following commands:   unzip gauge-$VERSION-$OS.$ARCH.zip\n./install.sh", 
+            "title": "Installing Gauge"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/#installing-chromedriver", 
+            "text": "It is necessary to have chromedriver installed on your system to run integration tests via Google Chrome. Google Chrome is preferable to Firefox due to connection issues.   Assuming you are running a 64-bit OS, download the latest version of chromedriver and unzip it.   wget -N http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux64.zip -P ~/Downloads  unzip ~/Downloads/chromedriver_linux64.zip -d ~/Downloads   Make the file you just extracted executable and move it to  /usr/local/share .   chmod +x ~/Download/chromedriver  sudo mv -f ~/Downloads/chromedriver /usr/local/share/chromedriver   Now create symlinks to chromedriver.   sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver  sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver   Now chromedriver will be found on your system.", 
+            "title": "Installing chromedriver"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/#executing-integration-tests", 
+            "text": "In the following section setting up variables to start integration-tests will be described. Short examples show how to start Gauge tests using Maven via command line.", 
+            "title": "Executing integration-tests"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/#configurate-url", 
+            "text": "If you are in the  integration-tests  folder, you might configurate the test environment variables using the command line as follows without changing  gauge_jvm_args  manually in the file  ./env/default/java.properties :  gauge_jvm_args= -Deco.system=${url} mvn test  e.g. if the url is  https://192.168.115.136  gauge_jvm_args= -Deco.system=https://192.168.115.136 mvn test  This command will define  -D  the system property  eco.system  which is needed for the test environment and execute  mvn test  to start the integration-tests with that property. The specified url should be the same url to open cloudogu in the browser. Once configurated integration tests can be started with  mvn test .", 
+            "title": "Configurate Url"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/#start-certain-tests-using-tags", 
+            "text": "While  mvn test  will start all Gauge specifications defined in the integration-tests, it might be useful only to start certain tests. The scenarios inside the specification files are marked with tags. So if only that scenario should be started you have to enter  mvn test -Dtags=${tag}  where  ${tag}  is predefined in the spec files in the  specs  directory. An command could be  mvn test -Dtags=jenkins  to start all Jenkins scenarios. The following values for  ${tag}  are allowed:     Tag  Definition      jenkins  Starts all tests associated with Jenkins    redmine  ... with Redmine    usermgt  ... with Usermgt    sonar  ... Sonar    nexus  ... with Nexus    scm  ... with SCM    workflow  Starts all Workflow tests    rest_api  Starts all REST Api tests    rest_api_token  Starts REST Api tests using tokens/keys    single_sign_out  Starts all Single Sign Out tests    groups  Starts tests involving groups    attributes  Starts tests to check user attributes     Besides using only one tag it is possible to use a set of tags, assumed the certain set is defined. To use multiple tags use  mvn test -Dtags=\"${tag0},${tag1}\" . For example: The command  mvn test -Dtags=\"jenkins, workflow\"  will test the workflow of Jenkins. Allowed tag combinations are presented in the table:     Tags  jenkins  redmine  usermgt  sonar  nexus  scm      workflow  yes  yes  yes  yes  yes  yes    rest_api  yes  yes  yes  yes  yes  yes    rest_api_token  yes  yes  no  yes  yes  no    single_sign_out  yes  yes  yes  yes  yes  yes    groups  yes  yes  no  yes  yes  yes    attributes  yes  yes  no  yes  no  yes", 
+            "title": "Start certain tests using tags"
+        }, 
+        {
+            "location": "/user-guide/integration-tests/#specifications", 
+            "text": "Maven uses Gauge as an plugin which is executed in the test scope. Gauge consists of files with spec extension so called Specifications. If you run  mvn test  in integration-tests all files inside the  specs/  directory with spec extension will be executed. Specifications consist of scenarios, which again consist of a set of procedural Steps. E.g. all combined tests for Jenkins are combined in one spec file which are all tagged with  jenkins , single tests inside the file are scenarios. Go on  Gauge web site  for more informations about the gauge syntax.  In some tests we have the following step syntax:  * Jenkins-Login  admin  with password  adminpw  with admin rights  Such a step has to be implemented by a method using the  @Step  annotation. E.g. in Java is would look like this:  @Step( Jenkins-Login  user  with password  password  with admin rights )\npublic void loginWithAdminRights(String user, String password){\n  // some code using  user  and  password  to log in\n}  The two arguments \"admin\" and \"adminpw\" defined inside a step in the spec-file are injected to the method  public void loginWithAdminRights(String user, String password)  as user and password. Changing the arguments of the step inside the quotation marks will also change the two Strings  user  and  password  inside the implementing method.", 
+            "title": "Specifications"
+        }, 
+        {
+            "location": "/user-guide/dogu-creation/", 
+            "text": "How to create a dogu\n\n\n1. Create dogu directory\n\n\nCreate directory /ecosystem/containers/'newDoguName' and place these essential files into it:\n\n\n\n\nDockerfile\n --\n Creation of the Docker image of your new dogu\n\n\nstartup.sh\n --\n Commands executed at every start of the dogu\n\n\ndogu.json\n --\n Important dogu configuration information\n\n\n\n\nFor additional resources of the new dogu, a \nresources\n folder can be created.\n\n\n2. Fill files with content\n\n\nDockerfile\n\n\n\n\nFixed commands, which only need to be executed once are included here\n\n\nGuidelines for writing Dockerfiles can be found \nhere\n and \nhere\n. \n\n\nFor Java-based applications use the cloudogu \njava\n base image\n\n\nFor other applications use the cloudogu \nbase\n base image\n\n\nIf your dogu is a web application, add the line \nENV SERVICE_TAGS webapp\n. This will lead to the appearance of your dogu in the warp menu.\n\n\nCopy your resources to the dogu, if necessary\n\n\nPlease include \nMAINTAINER\n information\n\n\n\n\nstartup.sh\n\n\n\n\nCommands, which need to be executed at every start of the dogu are included here\n\n\nCreate or modify files and directories if necessary\n\n\nRun commands necessary at first or every start\n\n\nAdd a command to start your application at the end of the file\n\n\n\n\ndogu.json\n\n\n\n\nName: The name of the new dogu\n\n\nVersion: The version of the new dogu\n\n\nDisplayName: Full name of this dogu\n\n\nDescription: Short description of the software in this dogu\n\n\nCategory: The ecosystem category your dogu fits into. Possible options so far: \nDevelopment Apps\n, \nAdministration Apps\n, \nDocumentation\n and \nBase\n\n\nTags (JSON array): One-word tags related with this dogu\n\n\nLogo: Link to logo image for this application\n\n\nUrl: Official website of the software in this dogu\n\n\nImage: Path to the image in the cloudogu registry\n\n\nDependencies (JSON array): List of dogus this dogu depends on\n\n\nExposedCommands (JSON array):\n\n\nHealthChecks (JSON array): \n\n\nVolumes (JSON array): Directories in the ecosystem, which are also accessible from inside the dogu\n\n\nServiceAccounts (JSON array): \n\n\n\n\n3. Create your dogu\n\n\n\n\nStart up ecosystem\n\n\nGo to /vagrant/containers\n\n\nType \ncesapp build 'newDoguName'\n\n\nIf the dogu is successfully built, type \ndocker start 'newDoguName'\n\n\n\n\n4. Test your dogu\n\n\n\n\nCheck /var/log/docker/'newDoguName'.log if dogu is started up correctly\n\n\nRestart your dogu via \ndocker restart 'newDoguName'\n and check the log again\n\n\nMake sure all bash scripts comply with the \nguideline", 
+            "title": "Dogu creation"
+        }, 
+        {
+            "location": "/user-guide/dogu-creation/#how-to-create-a-dogu", 
+            "text": "", 
+            "title": "How to create a dogu"
+        }, 
+        {
+            "location": "/user-guide/dogu-creation/#1-create-dogu-directory", 
+            "text": "Create directory /ecosystem/containers/'newDoguName' and place these essential files into it:   Dockerfile  --  Creation of the Docker image of your new dogu  startup.sh  --  Commands executed at every start of the dogu  dogu.json  --  Important dogu configuration information   For additional resources of the new dogu, a  resources  folder can be created.", 
+            "title": "1. Create dogu directory"
+        }, 
+        {
+            "location": "/user-guide/dogu-creation/#2-fill-files-with-content", 
+            "text": "", 
+            "title": "2. Fill files with content"
+        }, 
+        {
+            "location": "/user-guide/dogu-creation/#dockerfile", 
+            "text": "Fixed commands, which only need to be executed once are included here  Guidelines for writing Dockerfiles can be found  here  and  here .   For Java-based applications use the cloudogu  java  base image  For other applications use the cloudogu  base  base image  If your dogu is a web application, add the line  ENV SERVICE_TAGS webapp . This will lead to the appearance of your dogu in the warp menu.  Copy your resources to the dogu, if necessary  Please include  MAINTAINER  information", 
+            "title": "Dockerfile"
+        }, 
+        {
+            "location": "/user-guide/dogu-creation/#startupsh", 
+            "text": "Commands, which need to be executed at every start of the dogu are included here  Create or modify files and directories if necessary  Run commands necessary at first or every start  Add a command to start your application at the end of the file", 
+            "title": "startup.sh"
+        }, 
+        {
+            "location": "/user-guide/dogu-creation/#dogujson", 
+            "text": "Name: The name of the new dogu  Version: The version of the new dogu  DisplayName: Full name of this dogu  Description: Short description of the software in this dogu  Category: The ecosystem category your dogu fits into. Possible options so far:  Development Apps ,  Administration Apps ,  Documentation  and  Base  Tags (JSON array): One-word tags related with this dogu  Logo: Link to logo image for this application  Url: Official website of the software in this dogu  Image: Path to the image in the cloudogu registry  Dependencies (JSON array): List of dogus this dogu depends on  ExposedCommands (JSON array):  HealthChecks (JSON array):   Volumes (JSON array): Directories in the ecosystem, which are also accessible from inside the dogu  ServiceAccounts (JSON array):", 
+            "title": "dogu.json"
+        }, 
+        {
+            "location": "/user-guide/dogu-creation/#3-create-your-dogu", 
+            "text": "Start up ecosystem  Go to /vagrant/containers  Type  cesapp build 'newDoguName'  If the dogu is successfully built, type  docker start 'newDoguName'", 
+            "title": "3. Create your dogu"
+        }, 
+        {
+            "location": "/user-guide/dogu-creation/#4-test-your-dogu", 
+            "text": "Check /var/log/docker/'newDoguName'.log if dogu is started up correctly  Restart your dogu via  docker restart 'newDoguName'  and check the log again  Make sure all bash scripts comply with the  guideline", 
+            "title": "4. Test your dogu"
+        }, 
+        {
+            "location": "/user-guide/migration/", 
+            "text": "How to migrate to Cloudogu Ecosystem\n\n\nJenkins\n\n\n\n\nStop jenkins dogu via \nservice ces-jenkins stop\n and \ndocker stop jenkins\n\n\nCopy jobs from source Jenkins instance '/job' folder to '/var/lib/ces/jenkins/volumes/data/jobs' and check for right file system permissions\n\n\nInstall all neccessary plugins to Jenkins\n\n\nStart Jenkins via \nservice ces-jenkins start\n\n\nDon't forget to change documentation/links to your new instance of Jenkins\n\n\n\n\nSonarQube\n\n\n\n\nStop sonar dogu via \nservice ces-sonar stop\n and \ndocker stop sonar\n\n\nGet database name from /var/lib/ces/sonar/volumes/data/conf/sonar.properties (same as sonar.jdbc.username)\n\n\nCopy sonar mysql.dump to /var/lib/ces/mysql/volumes/data/\n\n\nSwitch to Mysql dogu via \ndocker exec -it mysql bash\n\n\nExecute command: \nmysql --execute=\"set global max_allowed_packet=64*1024*1024;\"\n\n\nDrop all tables from database: \nmysql --execute=\"DROP DATABASE \ndatabase_name\n;\"\n and \nmysql --execute=\"CREATE DATABASE \ndatabase_name\n\"\n\n\nImport mysql database dump via \nmysql \ndatabase_name\n \n /var/lib/mysql/mysql.dump\n\n\nRemove SonarQube data/es folder: \nrm -rf /var/lib/ces/sonar/volumes/data/data/es\n\n\nAdd cesAdmin group to mysql database: Execute \nINSERT INTO \ndatabase_name\n.groups (name, description) VALUES ('cesAdmin', 'CES-Admin-Group');\n\n\nOptional: Install required plugins in SonarQube by copying the *.jar files to /var/lib/ces/sonar/volumes/data/extensions/plugins/\n\n\nStart SonarQube via \nservice ces-sonar start\n\n\n\n\nSonatype Nexus\n\n\n\n\nStop Sonatype nexus dogu via \nservice ces-nexus stop\n and \ndocker stop nexus\n\n\nCopy the contents of the following folders from your old sonatype_work/nexus directory to the corresponding /var/lib/ces/nexus/volumes/data folders: storage, conf, logs \n timeline\n\n\nCheck for right file system permissions\n\n\nStart Sonatype nexus via \nservice ces-nexus start\n\n\nUpdate indices\n\n\n\n\nSCM Manager\n\n\n\n\nStop SCM dogu via \nservice ces-scm stop\n and \ndocker stop scm\n\n\nCopy all data from your backup/old SCM folder to /var/lib/ces/scm/volumes/data/\n\n\nStart SCM via \nservice ces-scm start", 
+            "title": "Migration"
+        }, 
+        {
+            "location": "/user-guide/migration/#how-to-migrate-to-cloudogu-ecosystem", 
+            "text": "", 
+            "title": "How to migrate to Cloudogu Ecosystem"
+        }, 
+        {
+            "location": "/user-guide/migration/#jenkins", 
+            "text": "Stop jenkins dogu via  service ces-jenkins stop  and  docker stop jenkins  Copy jobs from source Jenkins instance '/job' folder to '/var/lib/ces/jenkins/volumes/data/jobs' and check for right file system permissions  Install all neccessary plugins to Jenkins  Start Jenkins via  service ces-jenkins start  Don't forget to change documentation/links to your new instance of Jenkins", 
+            "title": "Jenkins"
+        }, 
+        {
+            "location": "/user-guide/migration/#sonarqube", 
+            "text": "Stop sonar dogu via  service ces-sonar stop  and  docker stop sonar  Get database name from /var/lib/ces/sonar/volumes/data/conf/sonar.properties (same as sonar.jdbc.username)  Copy sonar mysql.dump to /var/lib/ces/mysql/volumes/data/  Switch to Mysql dogu via  docker exec -it mysql bash  Execute command:  mysql --execute=\"set global max_allowed_packet=64*1024*1024;\"  Drop all tables from database:  mysql --execute=\"DROP DATABASE  database_name ;\"  and  mysql --execute=\"CREATE DATABASE  database_name \"  Import mysql database dump via  mysql  database_name    /var/lib/mysql/mysql.dump  Remove SonarQube data/es folder:  rm -rf /var/lib/ces/sonar/volumes/data/data/es  Add cesAdmin group to mysql database: Execute  INSERT INTO  database_name .groups (name, description) VALUES ('cesAdmin', 'CES-Admin-Group');  Optional: Install required plugins in SonarQube by copying the *.jar files to /var/lib/ces/sonar/volumes/data/extensions/plugins/  Start SonarQube via  service ces-sonar start", 
+            "title": "SonarQube"
+        }, 
+        {
+            "location": "/user-guide/migration/#sonatype-nexus", 
+            "text": "Stop Sonatype nexus dogu via  service ces-nexus stop  and  docker stop nexus  Copy the contents of the following folders from your old sonatype_work/nexus directory to the corresponding /var/lib/ces/nexus/volumes/data folders: storage, conf, logs   timeline  Check for right file system permissions  Start Sonatype nexus via  service ces-nexus start  Update indices", 
+            "title": "Sonatype Nexus"
+        }, 
+        {
+            "location": "/user-guide/migration/#scm-manager", 
+            "text": "Stop SCM dogu via  service ces-scm stop  and  docker stop scm  Copy all data from your backup/old SCM folder to /var/lib/ces/scm/volumes/data/  Start SCM via  service ces-scm start", 
+            "title": "SCM Manager"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/", 
+            "text": "Bash script guideline\n\n\nStart with a shebang\n\n\nThe first line in a bash script should be\n\n\n#!/bin/bash\n\n\n\nAdd description\n\n\nPut a description in the beginning of the script if its purpose is not totally clear by its name or the like. \n\n\nUse the following set lines to make your script exit on errors instead of ignoring them:\n\n\nset -o errexit\n\n\n\nInstructs bash to immediately exit if any command has a non-zero exit status. You may add '|| true' to commands that you allow to fail/have a non-zero exit code.\n\n\nset -o nounset\n\n\n\nWhen set, a reference to any variable you haven't previously defined - with the exceptions of $* and $@ - is an error, and causes the program to immediately exit.\n\n\nset -o pipefail\n\n\n\nThis setting prevents errors in a pipeline from being masked. If any command in a pipeline fails, that return code will be used as the return code of the whole pipeline.\n\n\nWrite error information to stderr\n\n\nWrite all error data to stderr by putting \n\n\n2\n\n\n\nin front of or after 'echo' commands.\n\n\nUse variables with ${}\n\n\nWhen referencing variables, use curly brackets instead of just $VARIABLE.\n\n\nAutomate apt-get\n\n\nThe following lines are useful if software is automatically installed using apt-get:\n\n\napt-get --assume-yes (or -y) ...\n\n\n\nAutomatic 'yes' answer to questions from apt-get\n\n\nDEBIAN_FRONTEND=noninteractive apt-get ...\n\n\n\nMakes the frontend never interact with you at all and makes the default answers be used for all questions. \n\n\nRemove temporary data\n\n\nAfter copying installation data to a temporary location and executing it, do not forget to remove it if your installation was successful. \n\n\nFurther information:\n\n\nUnofficial Bash Strict Mode Description\n\n\nBest Practices for writing Bash scripts", 
+            "title": "Bash Scripting Guideline"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/#bash-script-guideline", 
+            "text": "", 
+            "title": "Bash script guideline"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/#start-with-a-shebang", 
+            "text": "The first line in a bash script should be  #!/bin/bash", 
+            "title": "Start with a shebang"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/#add-description", 
+            "text": "Put a description in the beginning of the script if its purpose is not totally clear by its name or the like.", 
+            "title": "Add description"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/#use-the-following-set-lines-to-make-your-script-exit-on-errors-instead-of-ignoring-them", 
+            "text": "set -o errexit  Instructs bash to immediately exit if any command has a non-zero exit status. You may add '|| true' to commands that you allow to fail/have a non-zero exit code.  set -o nounset  When set, a reference to any variable you haven't previously defined - with the exceptions of $* and $@ - is an error, and causes the program to immediately exit.  set -o pipefail  This setting prevents errors in a pipeline from being masked. If any command in a pipeline fails, that return code will be used as the return code of the whole pipeline.", 
+            "title": "Use the following set lines to make your script exit on errors instead of ignoring them:"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/#write-error-information-to-stderr", 
+            "text": "Write all error data to stderr by putting   2  in front of or after 'echo' commands.", 
+            "title": "Write error information to stderr"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/#use-variables-with", 
+            "text": "When referencing variables, use curly brackets instead of just $VARIABLE.", 
+            "title": "Use variables with ${}"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/#automate-apt-get", 
+            "text": "The following lines are useful if software is automatically installed using apt-get:  apt-get --assume-yes (or -y) ...  Automatic 'yes' answer to questions from apt-get  DEBIAN_FRONTEND=noninteractive apt-get ...  Makes the frontend never interact with you at all and makes the default answers be used for all questions.", 
+            "title": "Automate apt-get"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/#remove-temporary-data", 
+            "text": "After copying installation data to a temporary location and executing it, do not forget to remove it if your installation was successful.", 
+            "title": "Remove temporary data"
+        }, 
+        {
+            "location": "/user-guide/bash-guideline/#further-information", 
+            "text": "Unofficial Bash Strict Mode Description  Best Practices for writing Bash scripts", 
+            "title": "Further information:"
+        }, 
+        {
+            "location": "/about/", 
+            "text": "About\n\n\nTo be done...", 
+            "title": "About"
+        }, 
+        {
+            "location": "/about/#about", 
+            "text": "To be done...", 
+            "title": "About"
+        }
+    ]
+}

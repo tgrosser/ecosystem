@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Bash Scripting Guideline - Ecosystem Documentation</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+	
+	<script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Ecosystem Documentation</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            
+<li >
+    <a href="../integration-tests/">Integration-Tests</a>
+</li>
+                            
+<li >
+    <a href="../dogu-creation/">Dogu creation</a>
+</li>
+                            
+<li >
+    <a href="../migration/">Migration</a>
+</li>
+                            
+<li class="active">
+    <a href="./">Bash Scripting Guideline</a>
+</li>
+                        </ul>
+                    </li>
+                    <li >
+                        <a href="../../about/">About</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="../migration/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../../about/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#bash-script-guideline">Bash script guideline</a></li>
+            <li><a href="#start-with-a-shebang">Start with a shebang</a></li>
+            <li><a href="#add-description">Add description</a></li>
+            <li><a href="#use-the-following-set-lines-to-make-your-script-exit-on-errors-instead-of-ignoring-them">Use the following set lines to make your script exit on errors instead of ignoring them:</a></li>
+            <li><a href="#write-error-information-to-stderr">Write error information to stderr</a></li>
+            <li><a href="#use-variables-with">Use variables with ${}</a></li>
+            <li><a href="#automate-apt-get">Automate apt-get</a></li>
+            <li><a href="#remove-temporary-data">Remove temporary data</a></li>
+            <li><a href="#further-information">Further information:</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h2 id="bash-script-guideline">Bash script guideline</h2>
+<h5 id="start-with-a-shebang">Start with a shebang</h5>
+<p>The first line in a bash script should be</p>
+<pre><code>#!/bin/bash
+</code></pre>
+<h5 id="add-description">Add description</h5>
+<p>Put a description in the beginning of the script if its purpose is not totally clear by its name or the like. </p>
+<h5 id="use-the-following-set-lines-to-make-your-script-exit-on-errors-instead-of-ignoring-them">Use the following set lines to make your script exit on errors instead of ignoring them:</h5>
+<pre><code>set -o errexit
+</code></pre>
+<p>Instructs bash to immediately exit if any command has a non-zero exit status. You may add '|| true' to commands that you allow to fail/have a non-zero exit code.</p>
+<pre><code>set -o nounset
+</code></pre>
+<p>When set, a reference to any variable you haven't previously defined - with the exceptions of $* and $@ - is an error, and causes the program to immediately exit.</p>
+<pre><code>set -o pipefail
+</code></pre>
+<p>This setting prevents errors in a pipeline from being masked. If any command in a pipeline fails, that return code will be used as the return code of the whole pipeline.</p>
+<h5 id="write-error-information-to-stderr">Write error information to stderr</h5>
+<p>Write all error data to stderr by putting </p>
+<pre><code>&gt;&amp;2
+</code></pre>
+<p>in front of or after 'echo' commands.</p>
+<h5 id="use-variables-with">Use variables with ${}</h5>
+<p>When referencing variables, use curly brackets instead of just $VARIABLE.</p>
+<h5 id="automate-apt-get">Automate apt-get</h5>
+<p>The following lines are useful if software is automatically installed using apt-get:</p>
+<pre><code>apt-get --assume-yes (or -y) ...
+</code></pre>
+<p>Automatic 'yes' answer to questions from apt-get</p>
+<pre><code>DEBIAN_FRONTEND=noninteractive apt-get ...
+</code></pre>
+<p>Makes the frontend never interact with you at all and makes the default answers be used for all questions. </p>
+<h5 id="remove-temporary-data">Remove temporary data</h5>
+<p>After copying installation data to a temporary location and executing it, do not forget to remove it if your installation was successful. </p>
+<h4 id="further-information">Further information:</h4>
+<p><a href="http://redsymbol.net/articles/unofficial-bash-strict-mode/">Unofficial Bash Strict Mode Description</a></p>
+<p><a href="http://kvz.io/blog/2013/11/21/bash-best-practices/">Best Practices for writing Bash scripts</a></p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
