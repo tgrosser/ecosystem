@@ -5,6 +5,52 @@ set -o pipefail
 
 source /etc/ces/functions.sh
 
+function getActiveRecordPlugin(){
+  if [ "true" == "$(doguctl config --global proxy/enabled)" ]; then
+    PROXYSERVER=$(doguctl config --global proxy/server)
+    PROXYPORT=$(doguctl config --global proxy/port)
+    if PROXYUSER=$(doguctl config --global proxy/username) && PROXYPASSWORD=$(doguctl config --global proxy/password); then
+      curl -L -o redmine_AR_session_store.tar.gz --proxy http://${PROXYUSER}:${PROXYPASSWORD}@${PROXYSERVER}:${PROXYPORT} https://github.com/pencil/redmine_activerecord_session_store/archive/v0.0.1.tar.gz
+      extractARPlugin
+    else
+      curl -L -o redmine_AR_session_store.tar.gz --proxy http://${PROXYSERVER}:${PROXYPORT} https://github.com/pencil/redmine_activerecord_session_store/archive/v0.0.1.tar.gz
+      extractARPlugin
+    fi
+  else
+    curl -L -o redmine_AR_session_store.tar.gz https://github.com/pencil/redmine_activerecord_session_store/archive/v0.0.1.tar.gz
+    extractARPlugin
+  fi
+}
+
+function extractARPlugin(){
+  tar -xzf redmine_AR_session_store.tar.gz \
+  && mv redmine_activerecord_session_store-0.0.1 ${WORKDIR}/plugins/redmine_activerecord_session_store \
+  && rm redmine_AR_session_store.tar.gz
+}
+
+function getCASPlugin(){
+  if [ "true" == "$(doguctl config --global proxy/enabled)" ]; then
+    PROXYSERVER=$(doguctl config --global proxy/server)
+    PROXYPORT=$(doguctl config --global proxy/port)
+    if PROXYUSER=$(doguctl config --global proxy/username) && PROXYPASSWORD=$(doguctl config --global proxy/password); then
+      curl -L -o casplugin${RMCASPLUGINVERSION}.tar.gz --proxy http://${PROXYUSER}:${PROXYPASSWORD}@${PROXYSERVER}:${PROXYPORT} https://github.com/cloudogu/redmine_cas/archive/${RMCASPLUGINVERSION}.tar.gz
+      extractCASPlugin
+    else
+      curl -L -o casplugin${RMCASPLUGINVERSION}.tar.gz --proxy http://${PROXYSERVER}:${PROXYPORT} https://github.com/cloudogu/redmine_cas/archive/${RMCASPLUGINVERSION}.tar.gz
+      extractCASPlugin
+    fi
+  else
+    curl -L -o casplugin${RMCASPLUGINVERSION}.tar.gz https://github.com/cloudogu/redmine_cas/archive/${RMCASPLUGINVERSION}.tar.gz
+    extractCASPlugin
+  fi
+}
+
+function extractCASPlugin(){
+  tar -xzf casplugin${RMCASPLUGINVERSION}.tar.gz \
+  && mv redmine_cas-${RMCASPLUGINVERSION} ${WORKDIR}/plugins/redmine_cas \
+  && rm casplugin${RMCASPLUGINVERSION}.tar.gz
+}
+
 # get variables for templates
 FQDN=$(doguctl config --global fqdn)
 DATABASE_TYPE=postgresql
@@ -89,18 +135,12 @@ fi
 if [ $(ls -l ${WORKDIR}/plugins/ | grep "redmine_activerecord" | wc -l) -eq 0 ]; then
   # Install redmine_activerecord_session_store plugin to make Single Sign-Out work
   echo "installing redmine_activerecord_session_store plugin"
-  curl -L -o redmine_AR_session_store.tar.gz https://github.com/pencil/redmine_activerecord_session_store/archive/v0.0.1.tar.gz \
-    && tar -xzf redmine_AR_session_store.tar.gz \
-    && mv redmine_activerecord_session_store-0.0.1 ${WORKDIR}/plugins/redmine_activerecord_session_store \
-    && rm redmine_AR_session_store.tar.gz
+  getActiveRecordPlugin
 fi
 if [ $(ls -l ${WORKDIR}/plugins/ | grep "redmine_cas" | wc -l) -eq 0 ]; then
   # Install Redmine CAS plugin
   echo "installing CAS plugin"
-  curl -L -o casplugin${RMCASPLUGINVERSION}.tar.gz https://github.com/cloudogu/redmine_cas/archive/${RMCASPLUGINVERSION}.tar.gz \
-    && tar -xzf casplugin${RMCASPLUGINVERSION}.tar.gz \
-    && mv redmine_cas-${RMCASPLUGINVERSION} ${WORKDIR}/plugins/redmine_cas \
-    && rm casplugin${RMCASPLUGINVERSION}.tar.gz
+  getCASPlugin
 fi
 
 # Install Plugins
