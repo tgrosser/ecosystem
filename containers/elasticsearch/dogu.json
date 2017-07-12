@@ -1,0 +1,28 @@
+{
+  "Name": "official/elasticsearch",
+  "Version": "2.60.1-1",
+  "DisplayName": "Elasticsearch",
+  "Description": "Jenkins Continious Integration Server",
+  "Category": "Development Apps",
+  "Tags": [
+    "warp", "build", "ci", "cd"
+  ],
+  "Logo": "https://cloudogu.com/images/dogus/elasticsearch.png",
+  "Url": "https://www.elastic.co/de/",
+  "Image": "registry.cloudogu.com/official/elasticsearch",
+  "Dependencies": [
+    "cas", "nginx", "postfix"
+  ],
+  "Volumes": [{
+    "Name": "data",
+    "Path": "/var/lib/jenkins",
+    "Owner": "1000",
+    "Group": "1000"
+  }],
+  "HealthChecks": [{
+    "Type": "tcp",
+    "Port": 8080
+  }, {
+    "Type": "state"
+  }]
+}
