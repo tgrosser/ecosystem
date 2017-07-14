@@ -243,6 +243,75 @@ Um das Setup zu beenden und auf die Startseite Ihres CES zu gelangen klicken Sie
 ![Anmeldung CES](CES_Setup/21.png "Anmeldung CES")
 Geben Sie in dieser Maske die von Ihnen eingegebenen Anmeldeinformationen, sofern sie den internen Verzeichnisdienst ausgewählt haben. Andernfalls tragen Sie Ihre persönlichen Zugangsdaten des externen Verzeichnisdienstes (z.B. Active Directory) ein. 
 
+18. Anschließend gelangen Sie zu dem Dogu das bei der Installation als "Default Dogu" ausgewählt wurde. Zum Beispiel das Cockpit.
+![Default Dogu](CES_Setup/22.png "Default Dogu")
 
+# Usermanagement
+Das Cloudogu EcoSystem verfügt über mehrere Dogus, die installiert werden können. Eins davon ist das Usermanagement. Durch dieses Dogu können User angelegt, ihre Rechte verwaltet werden und Gruppen administriert werden. Die Bedienung des Usermanagements wird nachfolgend erläutert.
 
+## Wie gelange ich in das Usermanagement?
 
+- Das Usermanagement kann im Warp Menü ausgewählt werden. Hierzu klicken Sie den grauen Pfeil, welcher grundsätzlich auf der rechten Seite angezeigt wird.
+-  Anschließend klicken Sie auf Usermanagement. 
+
+    ![Warp Usermanagement](CES_Usermanagement/1.png "Warp Usermanagement")
+
+## Wie kann ich meine persönlichen Benutzereinstellungen (z.B. meine E-Mailadresse oder mein Passwort) verändern?
+
+- Klicken Sie im Warp Menü auf Usermanagement und Sie gelangen automatisch in den Bereich "Account". 
+- Unter "Options" können Sie ihre Benutzereinstellungen verändern. 
+- Klicken Sie auf "Save" um die Änderungen zu speichern.
+
+    ![Ändern von Benutzereinstellungen](CES_Usermanagement/2.png "Ändern von Benutzereinstellungen")
+
+## Wie finde ich als Admin einen bestimmten User?
+- Sofern Sie eine Vielzahl an Usern administrieren müssen, hilft Ihnen die Suchfunktion.
+- Wählen Sie den Reiter "Users" aus.
+![Usermanagement](CES_Usermanagement/3.png "Usermanagement")
+- Auf der Seite "Users" geben Sie im Bereich "Search" den "Username" oder den "Display Name" des zu suchenden Users ein und drücken Sie Enter.
+
+## Wie kann ich als Admin die Benutzereinstellungen von Usern editieren?
+- Wählen Sie im Usermanagement den Reiter "Users"
+
+- Sie erhalten eine Auflistung alle bestehenden User.
+- Klicken Sie unter "Functions" auf den Stift.
+![Ändern von Benutzereinstellungen](CES_Usermanagement/2.png "Ändern von Benutzereinstellungen")
+- Sie können nun die Benutzereinstellugen des Users editieren.
+- Klicken Sie zum speichern auf "Save"
+
+## Wie erstelle ich neue User?
+- Wählen Sie im Usermanagement den Reiter "Users".
+![Usermanagement](CES_Usermanagement/3.png "Usermanagement")
+- Klicken Sie auf "Create".
+![User neu erstellen](CES_Usermanagement/4.png "User neu erstellen")
+- Nehmen Sie die Eintragungen vor und speichern Sie mit "Save".
+![User neu erstellt](CES_Usermanagement/5.png "User neu erstellt")
+- Nach dem Sie gespeichert haben, werden Sie automatisch auf die Seite "Users" geleitet, auf der Ihnen der neue User angezeigt wird.
+- Sofern Sie noch Änderungen vornehmen möchten klicken Sie unter "Functions" auf den Stift.
+
+## Wie lösche ich User?
+- Klicken Sie hierzu auf der Seite "Users" auf die Mülltonne, die unter "Functions" in der Zeile des zu löschenden Users abgebildet ist. Bestätigen Sie die anschließende Sicherheitsabfrage.  
+
+## Wie erstelle ich neue Gruppen?
+
+- Wählen Sie im Usermanagement den Reiter "Groups" aus.
+- Klicken Sie auf den Button "Create".
+![Gruppen erstellen](CES_Usermanagement/6.png "Gruppen erstellen")
+- Nehme Sie ihre Eintragungen in den Bereichen "Name" und "Description" vor.
+- Anschließend speichern Sie die Eintragungen mit klick auf "Save". 
+- Die Gruppe ist nun erstellt.
+
+## Wie ordne ich Benutzer Gruppen zu?
+Es gibt zwei Wege die Zuordnung vorzunehmen.  
+1. Über die Benutzereigenschaften
+- Im Reiter "Users" wählen Sie für den entsprechenden Benutzer unter "Functions" das Stiftsymbol aus.
+- Anschließend wählen Sie den Reiter "Groups" geben den entsprechenden Gruppennamen ein.
+- Danach klicken Sie auf den Reiter "Options" und dort auf "Save" um ihre Zuordnung zu speichern.
+2. Über die Gruppeneigenschaften
+- Im Reiter "Groups" wählen Sie für die entsprechende Gruppe unter "Functions" das Stiftsymbol aus.
+- Klicken Sie auf den Reiter "Members".
+- Geben Sie unter "Add member" den entsprechenden Usernamen ein.
+- Klicken Sie auf den Reiter "Options" und dort auf "Save" um Ihre Zuordnung abzuschließen.
+
+## Wie lösche ich Gruppen?
+- Im Bereich "Groups" klicken Sie hierzu unter "Functions" auf das Mülleimersymbol der jeweiligen Gruppe und bestätigen Sie die Sicherheitsabfrage.
