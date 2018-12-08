@@ -46,3 +46,6 @@
 [submodule "containers/mongodb"]
         path = containers/mongodb
         url = git@github.com:tgrosser/mongodb.git
+[submodule "containers/cesbot"]
+	path = containers/cesbot
+	url = https://github.com/tgrosser/cesbot
