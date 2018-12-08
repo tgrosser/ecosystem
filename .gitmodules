@@ -43,3 +43,6 @@
 [submodule "containers/java"]
 	path = containers/java
 	url = git@github.com:cloudogu/java.git
+[submodule "containers/mongodb"]
+        path = containers/mongodb
+        url = git@github.com:tgrosser/mongodb.git
